@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SmartGarden</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_home_page">HomePage</string>
+    <string name="title_activity_add_garden_page">AddGardenPage</string>
+    <string name="title_activity_reg_page">RegPage</string>
+</resources>
