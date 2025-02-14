@@ -3,6 +3,8 @@
     <color name="SignInButton">#98c793</color>
     <color name="SignUpButton">#94ab91</color>
     <color name="GardenCard">#59cf67</color>
+    <color name="ArduinoCard">#8387fc</color>
+
     <color name="AddGardenButton">#a6630c</color>
 
 </resources>

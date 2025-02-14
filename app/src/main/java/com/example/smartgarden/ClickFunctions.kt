@@ -8,8 +8,7 @@ import android.widget.Toast
 import kotlin.math.log
 
 fun backArrowButton(context: Context){
-    Log.d("MyTag", "Back arrow was clickable")
-        (context as Activity)!!.finish()
+        (context as Activity).finish()
 }
 
 
@@ -17,9 +16,20 @@ fun SignUpButton(context: Context){
     context.startActivity(Intent(context, RegPage::class.java))
 }
 
+fun arduinoButton(context: Context){
+    val intent = Intent(context, ArduinoPage::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Закроет все предыдущие экземпляры ArduinoPage
+    context.startActivity(intent)
+}
+
 fun homeButton(context: Context){
-//    TODO Переадресация
-    Log.d("MyTag", "Home menu was clickable")
+    val intent = Intent(context, HomePage::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Закроет все предыдущие экземпляры ArduinoPage
+    context.startActivity(intent)
+}
+
+fun addArduinoButton(context: Context){
+//    TODO
 }
 
 fun authorizationButton(context: Context, login: String, password: String){

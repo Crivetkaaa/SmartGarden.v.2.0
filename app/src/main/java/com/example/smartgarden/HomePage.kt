@@ -32,8 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,8 +75,8 @@ fun Greeting2(modifier: Modifier = Modifier) {
                 context,
                 "Главное меню",
                 "Кнопка меню",
-                Icons.Default.Home,
-                { homeButton(context) }
+                ImageVector.vectorResource(R.drawable.motherboard),
+                { arduinoButton(context) }
             )
 
             Spacer(modifier = Modifier.fillMaxHeight(0.03f))
@@ -91,13 +93,22 @@ fun Greeting2(modifier: Modifier = Modifier) {
                     Card(modifier=Modifier.padding(3.dp),onClick = {}) {
                         Box(modifier=Modifier.fillMaxWidth()
                             .background(colorResource(R.color.GardenCard))) {
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 6.dp, vertical = 8.dp),
-                                text = "${garden.garden_name}",
-                                fontSize = 35.sp
-                            )
+                            Column {
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 6.dp, vertical = 8.dp),
+                                    text = "${garden.garden_name}",
+                                    fontSize = 35.sp
+                                )
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 6.dp, vertical = 8.dp),
+                                    text = "${garden.garden_description}",
+                                    fontSize = 22.sp
+                                )
+                            }
                         }
                     }
                 }

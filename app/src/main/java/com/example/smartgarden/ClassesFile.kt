@@ -11,9 +11,16 @@ data class User(
 
 data class Garden(
     val garden_id: Int,
-    val garden_name: String
+    val garden_name: String,
+    val garden_description: String
 )
 
+data class Arduino(
+    val arduino_id: Int,
+    val arduino_name: String,
+    val arduino_description: String,
+    val arduino_mac_address: String
+)
 class UserManager(){
     var usr: User? = null
 
@@ -23,6 +30,12 @@ class UserManager(){
 
     fun getGarden(callback: (ArrayList<Garden>) -> Unit){
         ConnectToAPI().getGardensFromAPI { result ->
+            callback(result)
+        }
+    }
+
+    fun getArduino(callback: (ArrayList<Arduino>) -> Unit){
+        ConnectToAPI().getArduinoFromAPI{ result ->
             callback(result)
         }
     }
