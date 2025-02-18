@@ -58,11 +58,9 @@ fun Greeting2(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var gardens = remember { mutableStateOf<ArrayList<Garden>?>(null) }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(false) {
         usrManager.getGarden() { result ->
-
             gardens.value = result
-
         }
 
     }
@@ -89,8 +87,7 @@ fun Greeting2(modifier: Modifier = Modifier) {
             LazyColumn(modifier = Modifier.padding(vertical = 6.dp, horizontal = 10.dp)
                 .fillMaxWidth().fillMaxHeight(0.9f)) {
                 items(gardens.value.orEmpty()){ garden ->
-                    Log.d("MyTag", "$garden")
-                    Card(modifier=Modifier.padding(3.dp),onClick = {}) {
+                    Card(modifier=Modifier.padding(3.dp),onClick = { openGardenPage(context, garden.garden_id) }) {
                         Box(modifier=Modifier.fillMaxWidth()
                             .background(colorResource(R.color.GardenCard))) {
                             Column {
@@ -113,9 +110,6 @@ fun Greeting2(modifier: Modifier = Modifier) {
                     }
                 }
             }
-
-
-
             Button(modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(6.dp),
                 colors = ButtonDefaults
                     .buttonColors(containerColor=colorResource(R.color.AddGardenButton)),

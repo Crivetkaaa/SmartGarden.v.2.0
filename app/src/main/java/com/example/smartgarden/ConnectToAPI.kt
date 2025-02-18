@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 
 class ConnectToAPI {
-    val ip = "http://188.32.24.142:12200/"
+    val ip = "http://192.168.1.120:8000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -125,12 +125,24 @@ class ConnectToAPI {
 
                     }
                     callback(userarduino)
-                    Log.d("MyTag", "$result")
                 } catch (e:Exception){
 
                 }
             }
 
+        }
+    }
+
+    fun addArduinGardenAPI(params: Map<String, Any>, callback: (Boolean, String) -> Unit){
+        val url = "api/arduinoingarden/"
+        CoroutineScope(Dispatchers.Main).launch {
+            postToAPI(url, params){ result ->
+                try {
+                    callback(true, "Теплица была добавлена")
+                } catch (e: Exception){
+                    callback(false, result)
+                }
+            }
         }
     }
 }

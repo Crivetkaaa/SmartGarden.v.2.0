@@ -11,7 +11,6 @@ fun backArrowButton(context: Context){
         (context as Activity).finish()
 }
 
-
 fun SignUpButton(context: Context){
     context.startActivity(Intent(context, RegPage::class.java))
 }
@@ -30,6 +29,7 @@ fun homeButton(context: Context){
 
 fun addArduinoButton(context: Context){
 //    TODO
+    Log.d("MyTag", "add Arduino was clickable")
 }
 
 fun authorizationButton(context: Context, login: String, password: String){
@@ -63,4 +63,26 @@ fun registrationButton(context: Context, login: String, password: String, passwo
 
 fun addGardenButton(context: Context){
     context.startActivity(Intent(context, AddGardenPage::class.java))
+}
+
+fun addArduinoInGarden(context: Context, arduino_id: Int = 0, garden_name: String, garden_discription: String){
+    (context as Activity).finish()
+    val params = mapOf(
+        "arduino_id" to arduino_id,
+        "garden_name" to garden_name,
+        "garden_description" to garden_discription,
+        "user_id" to usrManager.usr!!.id
+    )
+    ConnectToAPI().addArduinGardenAPI(params){ status, result ->
+        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+        if (status){
+            context.startActivity(Intent(context, HomePage::class.java))
+        }
+    }
+
+}
+
+fun openGardenPage(context: Context, garden_id: Int){
+    usrManager.garden_clickable = garden_id
+    context.startActivity(Intent(context, GardenPage::class.java))
 }

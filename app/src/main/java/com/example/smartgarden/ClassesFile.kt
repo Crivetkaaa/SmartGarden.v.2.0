@@ -23,6 +23,7 @@ data class Arduino(
 )
 class UserManager(){
     var usr: User? = null
+    var garden_clickable: Int? = null
 
 
     fun addUser(id: Int) {usr = User(id)}
@@ -34,8 +35,8 @@ class UserManager(){
         }
     }
 
-    fun getArduino(callback: (ArrayList<Arduino>) -> Unit){
-        ConnectToAPI().getArduinoFromAPI{ result ->
+    fun getArduino(free_arduino:(Boolean) = false, callback: (ArrayList<Arduino>) -> Unit){
+        ConnectToAPI().getArduinoFromAPI(free_arduino){ result ->
             callback(result)
         }
     }
