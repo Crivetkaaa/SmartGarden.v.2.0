@@ -61,6 +61,7 @@ fun Greeting2(modifier: Modifier = Modifier) {
     LaunchedEffect(false) {
         usrManager.getGarden() { result ->
             gardens.value = result
+            Log.d("MyTag", "$result")
         }
 
     }

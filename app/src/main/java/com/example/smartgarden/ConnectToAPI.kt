@@ -145,4 +145,46 @@ class ConnectToAPI {
             }
         }
     }
+
+    fun getGardenFromAPI(callback: (Array<String>) -> Unit){
+        val url = "api/mygarden/?user_id=${usrManager.usr!!.id}&garden_id=${usrManager.garden_clickable}"
+        CoroutineScope(Dispatchers.Main).launch {
+            getFromAPI(url){ result ->
+                try {
+                    Log.d("MyTag", "$result")
+                    val resbody = JSONObject(result)
+                    val aringr = resbody.getInt("aringr")
+
+                    usrManager.aringr = aringr
+
+                    val arduino_name = resbody.getString("arduino_name")
+                    val arduino_description = resbody.getString("arduino_description")
+                    val garden_name = resbody.getString("garden_name")
+                    val garden_description = resbody.getString("garden_description")
+                    var answer = arrayOf<String>(arduino_name, arduino_description,
+                        garden_name, garden_description)
+                    Log.d("MyTag", "$answer")
+                    callback(answer)
+                } catch (e: Exception){
+
+                }
+            }
+        }
+    }
+    fun postUpdateGarden(params: Map<String, Any>, callback: (Boolean) -> Unit){
+        CoroutineScope(Dispatchers.Main).launch {
+            postToAPI("api/edit/", params){ result ->
+                try {
+                    val resbody = JSONObject(result)
+                    val status = resbody.getBoolean("status")
+                    Log.d("MyTag", "$result")
+                    callback(status)
+                } catch (e: Exception){
+                    callback(false)
+                }
+
+            }
+        }
+
+    }
 }

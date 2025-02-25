@@ -5,7 +5,9 @@ import android.renderscript.ScriptGroup.Input
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Divider
@@ -32,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -45,15 +47,17 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun TopMenu(context: Context, text: String, description:String, icon:ImageVector, function: (() -> Unit)){
+fun TopMenu(context: Context, text: String, description:String, icon:ImageVector, function: (() -> Unit),
+            editbutton: Boolean = false){
+
+
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .background(colorResource(R.color.TopMenuColor)),
+        modifier = Modifier.background(colorResource(R.color.TopMenuColor)).fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = "backbutton",
+            contentDescription = description,
             modifier = Modifier.size(60.dp, 60.dp).padding(horizontal = 12.dp)
                 .clickable {
                     function.invoke()
@@ -63,6 +67,18 @@ fun TopMenu(context: Context, text: String, description:String, icon:ImageVector
             text=text,
             fontSize = 32.sp
         )
+        if (editbutton) {
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                ) {
+                Icon(
+                    imageVector = Icons.Default.Create,
+                    contentDescription = "editbutton",
+                    modifier = Modifier.size(60.dp, 60.dp).padding(horizontal = 12.dp)
+                        .clickable { editButton(context) }
+                )
+            }
+        }
     }
 }
 
@@ -112,7 +128,7 @@ fun DropMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, ar
                             expanded = expanded.value,
                             onDismissRequest = { expanded.value = false }
                         ) {
-                            for(arduino in arduino_data!!) {
+                            arduino_data?.forEach { arduino ->
                                 DropdownMenuItem(
                                     onClick = {
                                         selectedOption.value = arduino.arduino_name

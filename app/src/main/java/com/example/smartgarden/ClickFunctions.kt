@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import kotlin.math.log
+import org.json.JSONObject
 
 fun backArrowButton(context: Context){
         (context as Activity).finish()
@@ -66,23 +66,53 @@ fun addGardenButton(context: Context){
 }
 
 fun addArduinoInGarden(context: Context, arduino_id: Int = 0, garden_name: String, garden_discription: String){
-    (context as Activity).finish()
-    val params = mapOf(
-        "arduino_id" to arduino_id,
-        "garden_name" to garden_name,
-        "garden_description" to garden_discription,
-        "user_id" to usrManager.usr!!.id
-    )
-    ConnectToAPI().addArduinGardenAPI(params){ status, result ->
-        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
-        if (status){
-            context.startActivity(Intent(context, HomePage::class.java))
+    if (garden_name.isEmpty() || garden_discription.isEmpty()){
+        Toast.makeText(context, "Название и описание теплицы не могут быть пустыми", Toast.LENGTH_SHORT).show()
+    } else {
+        (context as Activity).finish()
+        val params = mapOf(
+            "arduino_id" to arduino_id,
+            "garden_name" to garden_name,
+            "garden_description" to garden_discription,
+            "user_id" to usrManager.usr!!.id
+        )
+        ConnectToAPI().addArduinGardenAPI(params) { status, result ->
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+            if (status) {
+                context.startActivity(Intent(context, HomePage::class.java))
+            }
         }
     }
-
 }
 
 fun openGardenPage(context: Context, garden_id: Int){
     usrManager.garden_clickable = garden_id
     context.startActivity(Intent(context, GardenPage::class.java))
+}
+
+fun editButton(context: Context){
+    context.startActivity(Intent(context, EditGarden::class.java))
+}
+
+fun saveChange(context: Context, garden_name: String, garden_discription: String,
+               arduino_id: Int, arduino_discription: String){
+    if (garden_name.isEmpty() || garden_discription.isEmpty()){
+        Toast.makeText(context, "Название и описание не могут быть пустыми", Toast.LENGTH_SHORT).show()
+    } else {
+        (context as Activity).finish()
+        val params = mapOf(
+            "arduino_in_garden" to usrManager.aringr!!.toInt(),
+            "garden_id" to usrManager.garden_clickable!!.toInt(),
+            "garden_name" to garden_name,
+            "garden_description" to garden_discription,
+            "new_arduino_id" to arduino_id,
+            "arduino_description" to arduino_discription
+        )
+
+        ConnectToAPI().postUpdateGarden(params) { result ->
+            Log.d("MyTag","wefwe")
+        }
+        Log.d("MyTag", "${JSONObject(params)}")
+
+    }
 }

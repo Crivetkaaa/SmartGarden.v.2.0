@@ -9,6 +9,11 @@ data class User(
     val id: Int
 )
 
+data class GardenArduino(
+    val garden: Garden,
+    val arduino: Arduino? = null
+)
+
 data class Garden(
     val garden_id: Int,
     val garden_name: String,
@@ -24,6 +29,7 @@ data class Arduino(
 class UserManager(){
     var usr: User? = null
     var garden_clickable: Int? = null
+    var aringr: Int? = null
 
 
     fun addUser(id: Int) {usr = User(id)}
@@ -33,6 +39,10 @@ class UserManager(){
         ConnectToAPI().getGardensFromAPI { result ->
             callback(result)
         }
+    }
+
+    fun getOneGarden(callback: (Garden) -> Unit){
+
     }
 
     fun getArduino(free_arduino:(Boolean) = false, callback: (ArrayList<Arduino>) -> Unit){
