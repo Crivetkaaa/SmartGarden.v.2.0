@@ -33,16 +33,11 @@ class UserManager(){
 
 
     fun addUser(id: Int) {usr = User(id)}
-    fun getUser(): User?  = usr
-
+    
     fun getGarden(callback: (ArrayList<Garden>) -> Unit){
         ConnectToAPI().getGardensFromAPI { result ->
             callback(result)
         }
-    }
-
-    fun getOneGarden(callback: (Garden) -> Unit){
-
     }
 
     fun getArduino(free_arduino:(Boolean) = false, callback: (ArrayList<Arduino>) -> Unit){
