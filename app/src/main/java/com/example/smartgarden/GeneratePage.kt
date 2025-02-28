@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Divider
@@ -48,7 +49,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TopMenu(context: Context, text: String, description:String, icon:ImageVector, function: (() -> Unit),
-            editbutton: Boolean = false){
+            deleteButton: Boolean = false){
 
 
     Row(
@@ -67,15 +68,15 @@ fun TopMenu(context: Context, text: String, description:String, icon:ImageVector
             text=text,
             fontSize = 32.sp
         )
-        if (editbutton) {
+        if (deleteButton) {
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 ) {
                 Icon(
-                    imageVector = Icons.Default.Create,
-                    contentDescription = "editbutton",
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "deleteButton",
                     modifier = Modifier.size(60.dp, 60.dp).padding(horizontal = 12.dp)
-                        .clickable { editButton(context) }
+                        .clickable { deleteButton(context) }
                 )
             }
         }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.keyframesWithSpline
 import org.json.JSONObject
 
 fun backArrowButton(context: Context){
@@ -90,8 +91,19 @@ fun openGardenPage(context: Context, garden_id: Int){
     context.startActivity(Intent(context, GardenPage::class.java))
 }
 
-fun editButton(context: Context){
-    context.startActivity(Intent(context, EditGarden::class.java))
+fun deleteButton(context: Context){
+    val params = mapOf(
+        "garden_id" to usrManager.garden_clickable!!.toInt()
+    )
+    Log.d("MyTag", "$params")
+    ConnectToAPI().postDeleteGarden(params) { result ->
+        val message = if (result) "Теплица удалена" else "Проблемы с подключенгием"
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        if (result) {
+            (context as Activity).finish()
+            context.startActivity(Intent(context, HomePage::class.java))
+        }
+    }
 }
 
 fun saveChange(context: Context, garden_name: String, garden_discription: String,

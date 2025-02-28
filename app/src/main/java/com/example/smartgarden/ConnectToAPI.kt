@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 
 class ConnectToAPI {
-    val ip = "http://192.168.1.120:8000/"
+    val ip = "http://188.32.24.142:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -185,6 +185,20 @@ class ConnectToAPI {
 
             }
         }
+    }
 
+    fun postDeleteGarden(params: Map<String, Any>, callback: (Boolean) -> Unit){
+        CoroutineScope(Dispatchers.Main).launch {
+            postToAPI("api/delete/", params){ result ->
+                Log.d("MyTag", result)
+                try {
+                    val resbody = JSONObject(result)
+                    val status = resbody.getBoolean("status")
+                    callback(status)
+                } catch (e: Exception) {
+                    callback(false)
+                }
+            }
+        }
     }
 }

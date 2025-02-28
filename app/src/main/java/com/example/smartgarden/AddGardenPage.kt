@@ -75,7 +75,7 @@ fun Greeting3(modifier: Modifier = Modifier) {
         }
     }
     Scaffold (modifier = Modifier.fillMaxSize()) { innerPadding ->
-
+        Column(modifier.padding(innerPadding)) {
             TopMenu(
                 content,
                 "Новая теплица",
@@ -83,7 +83,7 @@ fun Greeting3(modifier: Modifier = Modifier) {
                 Icons.Default.ArrowBack,
                 { backArrowButton(content) },
             )
-            Column {
+
             Spacer(Modifier.fillMaxHeight(0.12f))
 
             InputString(
