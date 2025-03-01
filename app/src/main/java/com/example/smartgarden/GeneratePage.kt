@@ -3,10 +3,12 @@ package com.example.smartgarden
 import android.content.Context
 import android.renderscript.ScriptGroup.Input
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,11 +21,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -143,5 +148,34 @@ fun DropMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, ar
                     }
             }
         )
+    }
+}
+
+
+@Composable
+fun GardenMenuInfo(labelName: String, name: String, description: String, function: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
+    ) {
+        Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.Center) {
+            Text(labelName, fontSize = 20.sp, modifier = Modifier.padding(horizontal = 12.dp))
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = "Название: $name", fontSize = 18.sp, modifier = Modifier.padding(12.dp))
+                Text(text = "Описание: $description", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 12.dp))
+            }
+
+            IconButton(
+                onClick = { function() },
+                modifier = Modifier
+                    .size(60.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Icon(Icons.Default.Edit, contentDescription = "editButton")
+            }
+        }
+
+        HorizontalDivider(Modifier.padding(vertical = 6.dp), thickness = 2.dp)
     }
 }

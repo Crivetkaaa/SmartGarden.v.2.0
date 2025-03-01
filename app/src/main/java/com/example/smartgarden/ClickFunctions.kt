@@ -106,25 +106,42 @@ fun deleteButton(context: Context){
     }
 }
 
-fun saveChange(context: Context, garden_name: String, garden_discription: String,
-               arduino_id: Int, arduino_discription: String){
-    if (garden_name.isEmpty() || garden_discription.isEmpty()){
-        Toast.makeText(context, "Название и описание не могут быть пустыми", Toast.LENGTH_SHORT).show()
-    } else {
-        (context as Activity).finish()
-        val params = mapOf(
-            "arduino_in_garden" to usrManager.aringr!!.toInt(),
-            "garden_id" to usrManager.garden_clickable!!.toInt(),
-            "garden_name" to garden_name,
-            "garden_description" to garden_discription,
-            "new_arduino_id" to arduino_id,
-            "arduino_description" to arduino_discription
-        )
+//fun saveChange(context: Context, garden_name: String, garden_discription: String,
+//               arduino_id: Int, arduino_discription: String){
+//    if (garden_name.isEmpty() || garden_discription.isEmpty()){
+//        Toast.makeText(context, "Название и описание не могут быть пустыми", Toast.LENGTH_SHORT).show()
+//    } else {
+//        (context as Activity).finish()
+//        val params = mapOf(
+//            "arduino_in_garden" to usrManager.aringr!!.toInt(),
+//            "garden_id" to usrManager.garden_clickable!!.toInt(),
+//            "garden_name" to garden_name,
+//            "garden_description" to garden_discription,
+//            "new_arduino_id" to arduino_id,
+//            "arduino_description" to arduino_discription
+//        )
+//
+//        ConnectToAPI().postUpdateGarden(params) { result ->
+//            Log.d("MyTag","wefwe")
+//        }
+//        Log.d("MyTag", "${JSONObject(params)}")
+//    }
+//}
 
-        ConnectToAPI().postUpdateGarden(params) { result ->
-            Log.d("MyTag","wefwe")
+fun getGardenInfo(context: Context, callback: (GardenArduino?) -> Unit){
+    ConnectToAPI().getGardenFromAPI { status, result ->
+        if (status) {
+            callback(result!!)
+        } else {
+            Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_SHORT).show()
         }
-        Log.d("MyTag", "${JSONObject(params)}")
-
     }
+}
+
+fun editButtonGarden(context: Context){
+
+}
+
+fun editButtonArduino(context: Context){
+
 }

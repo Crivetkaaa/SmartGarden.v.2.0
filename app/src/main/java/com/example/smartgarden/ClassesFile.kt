@@ -1,6 +1,7 @@
 package com.example.smartgarden
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.core.location.GnssStatusCompat.Callback
 
 val usrManager = UserManager()
@@ -10,7 +11,7 @@ data class User(
 )
 
 data class GardenArduino(
-    val garden: Garden,
+    val garden: Garden? = null,
     val arduino: Arduino? = null
 )
 
@@ -29,7 +30,7 @@ data class Arduino(
 class UserManager(){
     var usr: User? = null
     var garden_clickable: Int? = null
-    var aringr: Int? = null
+    var arduino_to_change: Int? = null
 
 
     fun addUser(id: Int) {usr = User(id)}

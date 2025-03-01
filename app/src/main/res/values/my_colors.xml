@@ -6,5 +6,6 @@
     <color name="ArduinoCard">#8387fc</color>
 
     <color name="AddGardenButton">#a6630c</color>
+    <color name="GraphBackground">#DCDCDC</color>
 
 </resources>

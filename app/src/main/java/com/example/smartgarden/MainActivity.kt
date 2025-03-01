@@ -52,8 +52,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(context: Context) {
-    var login = rememberSaveable { mutableStateOf("") }
-    var password = rememberSaveable { mutableStateOf("") }
+    var login = rememberSaveable { mutableStateOf("1") }
+    var password = rememberSaveable { mutableStateOf("1") }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {

@@ -146,27 +146,34 @@ class ConnectToAPI {
         }
     }
 
-    fun getGardenFromAPI(callback: (Array<String>) -> Unit){
+    fun getGardenFromAPI(callback: (Boolean, GardenArduino?) -> Unit){
         val url = "api/mygarden/?user_id=${usrManager.usr!!.id}&garden_id=${usrManager.garden_clickable}"
         CoroutineScope(Dispatchers.Main).launch {
             getFromAPI(url){ result ->
                 try {
                     Log.d("MyTag", "$result")
                     val resbody = JSONObject(result)
-                    val aringr = resbody.getInt("aringr")
+                    val status = resbody.getBoolean("arduino_check")
 
-                    usrManager.aringr = aringr
-
-                    val arduino_name = resbody.getString("arduino_name")
-                    val arduino_description = resbody.getString("arduino_description")
-                    val garden_name = resbody.getString("garden_name")
-                    val garden_description = resbody.getString("garden_description")
-                    var answer = arrayOf<String>(arduino_name, arduino_description,
-                        garden_name, garden_description)
-                    Log.d("MyTag", "$answer")
-                    callback(answer)
-                } catch (e: Exception){
-
+                    var arduino: Arduino? = null
+                    if (status) {
+                        arduino = Arduino(
+                            resbody.getInt("arduino_id"),
+                            resbody.getString("arduino_name"),
+                            resbody.getString("arduino_description"),
+                            resbody.getString("mac_address"))
+                        usrManager.arduino_to_change = resbody.getInt("arduino_id")
+                    }
+                    val garden = Garden(
+                        resbody.getInt("garden_id"),
+                        resbody.getString("garden_name"),
+                        resbody.getString("garden_description")
+                    )
+                    Log.d("MyTag", "${GardenArduino(garden, arduino)}")
+                    callback(true, GardenArduino(garden, arduino))
+                    } catch (e: Exception){
+                        Log.d("MyTag", "vssdv")
+                    callback(false, null)
                 }
             }
         }
