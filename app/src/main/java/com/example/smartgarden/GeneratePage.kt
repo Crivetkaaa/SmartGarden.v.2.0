@@ -90,7 +90,7 @@ fun TopMenu(context: Context, text: String, description:String, icon:ImageVector
 
 @Composable
 fun InputString(myvalue: String, myonvalue: (String) -> Unit,
-                label: String, placeholder: String, visual:Boolean){
+                label: String, placeholder: String, visual:Boolean = false){
 
     val passwordTransformation = if (visual) PasswordVisualTransformation() else VisualTransformation.None
 
@@ -108,9 +108,11 @@ fun InputString(myvalue: String, myonvalue: (String) -> Unit,
 }
 
 @Composable
-fun DropMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, arduino_data: ArrayList<Arduino>?){
+fun DropMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, arduino_data: ArrayList<Arduino>?,
+             value: String = ""){
     val expanded = remember { mutableStateOf(false) }
-    var selectedOption = remember { mutableStateOf("") }
+    var selectedOption = remember { mutableStateOf(value) }
+
 
     Row(modifier = Modifier.fillMaxWidth()) {
         TextField(

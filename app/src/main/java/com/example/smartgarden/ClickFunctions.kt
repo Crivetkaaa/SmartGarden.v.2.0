@@ -3,6 +3,7 @@ package com.example.smartgarden
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.EventLogTags.Description
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.keyframesWithSpline
@@ -40,6 +41,7 @@ fun authorizationButton(context: Context, login: String, password: String){
         ConnectToAPI().authorization(login, password) {status, errostatus ->
             if (status){
                 context.startActivity(Intent(context, HomePage::class.java))
+                (context as Activity).finish()
             }
         }
     }
@@ -139,9 +141,47 @@ fun getGardenInfo(context: Context, callback: (GardenArduino?) -> Unit){
 }
 
 fun editButtonGarden(context: Context){
-
+    val intent = Intent(context, EditPage::class.java).apply {
+        putExtra("garden", true)
+    }
+    context.startActivity(intent)
 }
 
 fun editButtonArduino(context: Context){
+    val intent = Intent(context, EditPage::class.java).apply {
+        putExtra("garden", false)
+    }
+    context.startActivity(intent)
+}
 
+fun saveEdit(context: Context, isGarden: Boolean, newName: String, newDescription: String) {
+    val params: Map<String, Any>
+    if (isGarden) {
+        params = mapOf(
+            "garden" to true,
+            "garden_id" to usrManager.gardenarduino!!.garden!!.garden_id,
+            "new_garden_name" to newName,
+            "new_garden_description" to newDescription
+        )
+    } else {
+        params = mapOf(
+            "garden" to false,
+            "garden_id" to usrManager.gardenarduino!!.garden!!.garden_id,
+            "old_arduino_id" to usrManager.gardenarduino!!.arduino!!.arduino_id,
+            "new_arduino_id" to newName.toInt(),
+            "new_arduino_description" to newDescription
+        )
+    }
+
+    ConnectToAPI().postUpdateGarden(params) { status ->
+        if (status) {
+            Toast.makeText(context, "Данные обновлены", Toast.LENGTH_SHORT).show()
+
+            (context as Activity).finish()
+        } else {
+            Toast.makeText(context, "Попробуйте позже", Toast.LENGTH_SHORT).show()
+
+        }
+        Log.d("MyTag", params.toString())
+    }
 }

@@ -69,7 +69,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
 
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
 
-    LaunchedEffect(false) {
+    LaunchedEffect(true) {
         getGardenInfo(context) { result ->
             garden_infos = result
         }

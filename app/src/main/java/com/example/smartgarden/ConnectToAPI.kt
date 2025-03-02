@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 
 class ConnectToAPI {
-    val ip = "http://188.32.24.142:12000/"
+    val ip = "http://192.168.0.15:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -170,6 +170,7 @@ class ConnectToAPI {
                         resbody.getString("garden_description")
                     )
                     Log.d("MyTag", "${GardenArduino(garden, arduino)}")
+                    usrManager.gardenarduino = GardenArduino(garden, arduino)
                     callback(true, GardenArduino(garden, arduino))
                     } catch (e: Exception){
                         Log.d("MyTag", "vssdv")

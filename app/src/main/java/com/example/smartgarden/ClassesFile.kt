@@ -17,8 +17,8 @@ data class GardenArduino(
 
 data class Garden(
     val garden_id: Int,
-    val garden_name: String,
-    val garden_description: String
+    var garden_name: String,
+    var garden_description: String
 )
 
 data class Arduino(
@@ -31,7 +31,7 @@ class UserManager(){
     var usr: User? = null
     var garden_clickable: Int? = null
     var arduino_to_change: Int? = null
-
+    var gardenarduino: GardenArduino? = null
 
     fun addUser(id: Int) {usr = User(id)}
     
