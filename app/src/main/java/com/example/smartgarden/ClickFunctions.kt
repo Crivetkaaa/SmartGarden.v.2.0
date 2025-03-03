@@ -3,11 +3,8 @@ package com.example.smartgarden
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.EventLogTags.Description
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.core.keyframesWithSpline
-import org.json.JSONObject
 
 fun backArrowButton(context: Context){
         (context as Activity).finish()
@@ -95,6 +92,7 @@ fun openGardenPage(context: Context, garden_id: Int){
 
 fun deleteButton(context: Context){
     val params = mapOf(
+        "garden" to true,
         "garden_id" to usrManager.garden_clickable!!.toInt()
     )
     Log.d("MyTag", "$params")
@@ -183,5 +181,21 @@ fun saveEdit(context: Context, isGarden: Boolean, newName: String, newDescriptio
 
         }
         Log.d("MyTag", params.toString())
+    }
+}
+
+fun deleteArduino(context: Context, arduino_id: Int){
+    val params = mapOf(
+        "garden" to false,
+        "arduino_id" to arduino_id
+    )
+    Log.d("MyTag", params.toString())
+    ConnectToAPI().postDeleteGarden(params){ status ->
+        if (status) {
+            Toast.makeText(context, "Ардуино была удалена", Toast.LENGTH_SHORT).show()
+            (context as Activity).recreate()
+        }
+        else Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_SHORT).show()
+
     }
 }

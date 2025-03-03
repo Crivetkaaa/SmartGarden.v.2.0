@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.example.smartgarden.ui.theme.SmartGardenTheme
 
 class HomePage : ComponentActivity() {
@@ -58,12 +62,22 @@ fun Greeting2(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var gardens = remember { mutableStateOf<ArrayList<Garden>?>(null) }
 
-    LaunchedEffect(false) {
-        usrManager.getGarden() { result ->
-            gardens.value = result
-            Log.d("MyTag", "$result")
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                usrManager.getGarden { result ->
+                    gardens.value = result
+                    Log.d("MyTag", "$result")
+                }
+            }
         }
 
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

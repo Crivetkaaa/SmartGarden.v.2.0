@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 
 class ConnectToAPI {
-    val ip = "http://192.168.0.15:12000/"
+    val ip = "http://192.168.1.120:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {

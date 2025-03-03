@@ -29,6 +29,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,11 +41,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.example.smartgarden.ui.theme.SmartGardenTheme
 
 class GardenPage : ComponentActivity() {
@@ -66,14 +70,24 @@ class GardenPage : ComponentActivity() {
 @Composable
 fun GardenPagePainter(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
 
-    LaunchedEffect(true) {
-        getGardenInfo(context) { result ->
-            garden_infos = result
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                getGardenInfo(context) { result ->
+                    garden_infos = result
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
 
     Column(modifier.fillMaxSize()) {
         TopMenu(
@@ -104,14 +118,13 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 arduinoInfo.arduino_name,
                 arduinoInfo.arduino_description,
                 { editButtonArduino(context) })
-        }
-
-        Row(
-            Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-        ) {
-            Text("Графики", fontSize = 20.sp)
-        }
+            Row(
+                Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
+                Text("Графики", fontSize = 20.sp)
+            }
             //TODO() Дожелать графики
+        }
     }
 }
 

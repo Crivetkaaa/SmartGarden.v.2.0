@@ -1,9 +1,5 @@
 package com.example.smartgarden
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.core.location.GnssStatusCompat.Callback
-
 val usrManager = UserManager()
 
 data class User(
