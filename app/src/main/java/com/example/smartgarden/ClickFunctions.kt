@@ -199,3 +199,9 @@ fun deleteArduino(context: Context, arduino_id: Int){
 
     }
 }
+
+fun getData(context: Context, arduino_id: Int){
+    ConnectToAPI().getArduinoData(params = "1"){ result ->
+        
+    }
+}

@@ -73,6 +73,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
+    val gardenData by remember { mutableStateOf<ArduinoData?>(null) }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -80,6 +81,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 getGardenInfo(context) { result ->
                     garden_infos = result
                 }
+
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
