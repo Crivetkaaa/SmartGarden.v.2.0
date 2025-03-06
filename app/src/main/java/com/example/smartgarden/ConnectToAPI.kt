@@ -8,6 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.*
 import org.json.JSONObject
+import java.sql.Time
+import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.util.Date
+import java.util.SimpleTimeZone
 
 
 class ConnectToAPI {
@@ -210,10 +215,33 @@ class ConnectToAPI {
         }
     }
 
-    fun getArduinoData(params: String, callback: (String) -> Unit) {
+    fun getArduinoData(arduino_id: Int, callback: (ArrayList<ArduinoData>) -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
-            getFromAPI("api/data/?${params}",){
-                callback("f")
+            getFromAPI("api/data/?arduino_id=${arduino_id}",){ result ->
+                try {
+                    val dateInputFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val dateOutputFormat = SimpleDateFormat("dd.MM.yyyy")
+
+                    val resbody = JSONObject(result)
+                    val array: ArrayList<ArduinoData> = ArrayList()
+
+                    for (key in resbody.keys()) {
+                        val datajson = resbody.getJSONObject(key)
+                        Log.d("MyTag", datajson.toString())
+                        val date = dateOutputFormat.format(dateInputFormat.parse(datajson.getString("date")))
+                        val time = datajson.getString("time")
+                        val air_t = datajson.getDouble("air_t")
+                        val air_h = datajson.getDouble("air_h")
+                        val earth_h = datajson.getDouble("earth_h")
+
+                        array.add(ArduinoData(date, time.substring(0, 5), air_t, air_h, earth_h))
+                    }
+                    Log.d("MyTag", "${array[0].time}")
+                    callback(array)
+                } catch (e: Exception) {
+                    Log.e("MyTag", "Ошибка при обработке данных: ${e.message}")
+                }
+
             }
         }
 

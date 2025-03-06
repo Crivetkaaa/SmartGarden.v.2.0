@@ -200,8 +200,8 @@ fun deleteArduino(context: Context, arduino_id: Int){
     }
 }
 
-fun getData(context: Context, arduino_id: Int){
-    ConnectToAPI().getArduinoData(params = "1"){ result ->
-        
+fun getData(context: Context, arduino_id: Int, callback: (ArrayList<ArduinoData>?) -> Unit){
+    ConnectToAPI().getArduinoData(arduino_id) { result ->
+        callback(result)
     }
 }

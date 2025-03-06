@@ -1,6 +1,6 @@
 package com.example.smartgarden
 
-import java.sql.Date
+import java.util.Date
 import java.sql.Time
 
 val usrManager = UserManager()
@@ -10,11 +10,11 @@ data class User(
 )
 
 data class ArduinoData(
-    val date: Date,
-    val time: Time,
-    val temperature: Int,
-    val humidity: Int,
-    val earth_humidity: Int
+    val date: String,
+    val time: String,
+    val temperature: Double,
+    val humidity: Double,
+    val earth_humidity: Double
 
 )
 

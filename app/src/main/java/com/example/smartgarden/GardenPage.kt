@@ -2,6 +2,7 @@ package com.example.smartgarden
 
 import android.graphics.drawable.Icon
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -73,7 +74,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
-    val gardenData by remember { mutableStateOf<ArduinoData?>(null) }
+    var gardenData by remember { mutableStateOf<List<ArduinoData>?>(null) }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -81,6 +82,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 getGardenInfo(context) { result ->
                     garden_infos = result
                 }
+
 
             }
         }
@@ -125,7 +127,12 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
             ) {
                 Text("Графики", fontSize = 20.sp)
             }
-            //TODO() Дожелать графики
+            getData(context, arduinoInfo.arduino_id) { result ->
+                gardenData = result
+            }
+            gardenData?.let { data ->
+                Text(data.toString())
+            }
         }
     }
 }
