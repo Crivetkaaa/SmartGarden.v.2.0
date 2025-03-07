@@ -8,4 +8,9 @@
     <color name="AddGardenButton">#a6630c</color>
     <color name="GraphBackground">#DCDCDC</color>
 
+    <color name="AirTemperatureGraphic">#FF7F50</color>
+    <color name="AirHumidityGraphic">#4682B4</color>
+    <color name="EarthHumidityGraphic">#4B3D3A</color>
+
+
 </resources>

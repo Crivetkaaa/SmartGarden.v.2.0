@@ -11,7 +11,6 @@ data class User(
 
 data class ArduinoData(
     val date: String,
-    val time: String,
     val temperature: Double,
     val humidity: Double,
     val earth_humidity: Double

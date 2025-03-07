@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -73,6 +75,9 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val state = rememberScrollState()
+    LaunchedEffect(Unit) { state.animateScrollTo(100) }
+
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
     var gardenData by remember { mutableStateOf<List<ArduinoData>?>(null) }
 
@@ -93,7 +98,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
     }
 
 
-    Column(modifier.fillMaxSize()) {
+    Column(modifier.fillMaxSize().verticalScroll(state)) {
         TopMenu(
             context,
             "Меню теплицы",
@@ -118,6 +123,8 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 { editButtonGarden(context) })
         }
         garden_infos?.arduino?.let { arduinoInfo ->
+
+
             GardenMenuInfo("Aрдуино",
                 arduinoInfo.arduino_name,
                 arduinoInfo.arduino_description,
@@ -131,7 +138,108 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 gardenData = result
             }
             gardenData?.let { data ->
-                Text(data.toString())
+                val temperatures = data.map { it.temperature.toFloat() }
+                val air_h = data.map { it.humidity.toFloat() }
+                val dates = data.map { it.date }
+
+                DrawTemperatureChart(
+                    temperatures, dates,
+                    colorResource(R.color.AirTemperatureGraphic), "Температура воздуха"
+                )
+
+
+                Spacer(Modifier.height(45.dp))
+                DrawTemperatureChart(
+                    air_h, dates,
+                    colorResource(R.color.AirHumidityGraphic), "Влажность воздуха"
+                )
+
+                Spacer(Modifier.height(45.dp))
+                DrawTemperatureChart(
+                    air_h, dates,
+                    colorResource(R.color.EarthHumidityGraphic), "Влажность земли"
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun DrawTemperatureChart(temperatures: List<Float>, dates: List<String>, mycolor: Color,
+                         graphicsName: String) {
+    val maxTemperature = temperatures.maxOrNull() ?: 1f
+    val barWidth = 20.dp
+    val spacing = 13.dp
+
+    val totalWidth = (temperatures.size * (barWidth.value + spacing.value)).dp + 15.dp
+
+    val state = rememberScrollState()
+    LaunchedEffect(Unit) { state.animateScrollTo(100) }
+
+    Row(
+        Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+    ) {
+        Text("$graphicsName", fontSize = 20.sp)
+    }
+
+    Row(Modifier.horizontalScroll(state = state).padding(12.dp)) {
+        Canvas(
+            modifier = Modifier
+                .width(totalWidth)
+                .height(340.dp)
+        ) {
+            val canvasHeight = size.height
+
+            for (i in temperatures.indices) {
+                val temperatureHeight =
+                    (temperatures[i] / maxTemperature) * (canvasHeight * 0.8f)
+
+                drawRect(
+                    color = mycolor,
+                    topLeft = androidx.compose.ui.geometry.Offset(
+                        x = (i * (barWidth.toPx() + spacing.toPx())),
+                        y = canvasHeight - temperatureHeight.toFloat() - 120f
+                    ),
+                    size = androidx.compose.ui.geometry.Size(
+                        width = barWidth.toPx(),
+                        height = temperatureHeight.toFloat()
+                    )
+                )
+
+                val textX = (i * (barWidth.toPx() + spacing.toPx())) + (barWidth.toPx() / 2)
+                val textY = canvasHeight - temperatureHeight.toFloat() - 127f
+
+                val paint = android.graphics.Paint().apply {
+                    textSize = 30f
+                    color = android.graphics.Color.BLACK
+                    textAlign = android.graphics.Paint.Align.CENTER
+                }
+
+                drawContext.canvas.nativeCanvas.drawText(
+                    temperatures[i].toString(),
+                    textX,
+                    textY,
+                    paint
+                )
+
+                drawContext.canvas.nativeCanvas.save()
+
+                val rotatedTextX = textX - 20f
+                val rotatedTextY = canvasHeight - 15f
+
+                drawContext.canvas.nativeCanvas.rotate(45f, rotatedTextX, rotatedTextY)
+
+                val textHeight = paint.descent() - paint.ascent()
+
+                drawContext.canvas.nativeCanvas.drawText(
+                    dates[i],
+                    rotatedTextX - (textHeight / 2) + 45f,
+                    rotatedTextY - textHeight - 30f,
+                    paint
+                )
+
+                drawContext.canvas.nativeCanvas.restore()
             }
         }
     }
