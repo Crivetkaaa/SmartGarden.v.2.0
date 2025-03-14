@@ -8,4 +8,6 @@
     <string name="title_activity_garden_page">GardenPage</string>
     <string name="title_activity_edit_garden">EditGarden</string>
     <string name="title_activity_edit_page">EditPage</string>
+    <string name="title_activity_add_arduino_page">addArduinoPage</string>
+    <string name="title_activity_test">test</string>
 </resources>

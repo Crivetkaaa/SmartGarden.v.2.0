@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.material3.rememberTopAppBarState
 
 fun backArrowButton(context: Context){
         (context as Activity).finish()
@@ -28,7 +29,7 @@ fun homeButton(context: Context){
 
 fun addArduinoButton(context: Context){
 //    TODO
-    Log.d("MyTag", "add Arduino was clickable")
+    context.startActivity(Intent(context, addArduinoPage::class.java))
 }
 
 fun authorizationButton(context: Context, login: String, password: String){
@@ -189,7 +190,6 @@ fun deleteArduino(context: Context, arduino_id: Int){
         "garden" to false,
         "arduino_id" to arduino_id
     )
-    Log.d("MyTag", params.toString())
     ConnectToAPI().postDeleteGarden(params){ status ->
         if (status) {
             Toast.makeText(context, "Ардуино была удалена", Toast.LENGTH_SHORT).show()
@@ -201,7 +201,33 @@ fun deleteArduino(context: Context, arduino_id: Int){
 }
 
 fun getData(context: Context, arduino_id: Int, callback: (ArrayList<ArduinoData>?) -> Unit){
-    ConnectToAPI().getArduinoData(arduino_id) { result ->
+    ConnectToAPI().getArduinoData( arduino_id){ result ->
         callback(result)
+    }
+}
+
+fun addArduino(context: Context, wifiSSID: String, wifiPassword: String,
+               arduino_name: String, arduino_description: String){
+    if (!wifiSSID.equals("")) {
+        val params = mapOf(
+            "wifiSSID" to wifiSSID,
+            "wifiPassword" to wifiPassword,
+            "ardiono_name" to arduino_name,
+            "arduino_description" to arduino_description
+        )
+
+        Log.d("MyTag", params.toString())
+        ConnectToESP().postArduino(params) { status ->
+            if (status) {
+                Toast.makeText(context, "Ардуино добавлено", Toast.LENGTH_SHORT).show()
+                Log.d("MyTag", "good")
+                (context as Activity).finish()
+            } else {
+                Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_SHORT).show()
+                Log.d("MyTag", "bad")
+            }
+        }
+    } else {
+        Toast.makeText(context, "WiFi не может быть пустым",  Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.smartgarden
 
 import android.content.Context
+import android.net.wifi.ScanResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -135,7 +136,48 @@ fun DropMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, ar
         )
     }
 }
+@Composable
+fun DropWiFiMenu(myonvalue: (String) -> kotlin.Unit, label: String, placeholder: String, data: List<ScanResult>) {
+    val expanded = remember { mutableStateOf(false) }
+    var selectedOption = remember { mutableStateOf("") }
 
+    Row(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            value = selectedOption.value,
+            onValueChange = myonvalue,
+            label = { Text(label) },
+            placeholder = { Text(placeholder) },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+            readOnly = true,
+            trailingIcon = {
+                Box {
+                    IconButton(onClick = { expanded.value = true }) {
+                        Icon(
+                            Icons.Default.ArrowDropDown,
+                            contentDescription = "Показать меню"
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }
+                    ) {
+                        data.forEach { network->
+                            if (!network.SSID.equals("")) {
+                                DropdownMenuItem(onClick = {
+                                    selectedOption.value = network.SSID
+                                    myonvalue(network.SSID)
+                                    expanded.value = false
+                                },
+                                    text = { Text(network.SSID.toString()) }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
+}
 
 @Composable
 fun GardenMenuInfo(labelName: String, name: String, description: String, function: () -> Unit) {

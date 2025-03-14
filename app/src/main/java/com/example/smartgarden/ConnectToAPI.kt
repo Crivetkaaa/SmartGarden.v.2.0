@@ -8,15 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.*
 import org.json.JSONObject
-import java.sql.Time
 import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.util.Date
-import java.util.SimpleTimeZone
 
 
 class ConnectToAPI {
-    val ip = "http://188.32.24.142:12000/"
+    val ip = "http://192.168.248.120:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -244,6 +240,5 @@ class ConnectToAPI {
 
             }
         }
-
     }
 }
