@@ -28,7 +28,6 @@ fun homeButton(context: Context){
 }
 
 fun addArduinoButton(context: Context){
-//    TODO
     context.startActivity(Intent(context, addArduinoPage::class.java))
 }
 
@@ -208,12 +207,14 @@ fun getData(context: Context, arduino_id: Int, callback: (ArrayList<ArduinoData>
 
 fun addArduino(context: Context, wifiSSID: String, wifiPassword: String,
                arduino_name: String, arduino_description: String){
+    Log.d("MyTag", usrManager.usr!!.id.toString())
     if (!wifiSSID.equals("")) {
         val params = mapOf(
             "wifiSSID" to wifiSSID,
             "wifiPassword" to wifiPassword,
             "ardiono_name" to arduino_name,
-            "arduino_description" to arduino_description
+            "arduino_description" to arduino_description,
+            "user_id" to usrManager.usr!!.id
         )
 
         Log.d("MyTag", params.toString())
@@ -221,7 +222,7 @@ fun addArduino(context: Context, wifiSSID: String, wifiPassword: String,
             if (status) {
                 Toast.makeText(context, "Ардуино добавлено", Toast.LENGTH_SHORT).show()
                 Log.d("MyTag", "good")
-                (context as Activity).finish()
+                context.startActivity(Intent(context, ArduinoPage::class.java))
             } else {
                 Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_SHORT).show()
                 Log.d("MyTag", "bad")

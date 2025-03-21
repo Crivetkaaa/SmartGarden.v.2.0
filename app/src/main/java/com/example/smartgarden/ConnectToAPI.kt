@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 
 class ConnectToAPI {
-    val ip = "http://192.168.248.120:12000/"
+    val ip = "http://188.32.24.142:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -230,7 +230,7 @@ class ConnectToAPI {
                         val air_t = datajson.getDouble("air_t")
                         val air_h = datajson.getDouble("air_h")
                         val earth_h = datajson.getDouble("earth_h")
-
+                        Log.d("MyTag", "${air_t}  $air_h")
                         array.add(ArduinoData(date, air_t, air_h, earth_h))
                     }
                     callback(array)

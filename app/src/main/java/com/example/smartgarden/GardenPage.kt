@@ -140,7 +140,9 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
             gardenData?.let { data ->
                 val temperatures = data.map { it.temperature.toFloat() }
                 val air_h = data.map { it.humidity.toFloat() }
+                val earth_h = data.map { it.earth_humidity.toFloat() }
                 val dates = data.map { it.date }
+
 
                 DrawTemperatureChart(
                     temperatures, dates,
@@ -156,7 +158,7 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
 
                 Spacer(Modifier.height(45.dp))
                 DrawTemperatureChart(
-                    air_h, dates,
+                    earth_h, dates,
                     colorResource(R.color.EarthHumidityGraphic), "Влажность земли"
                 )
 
@@ -189,7 +191,7 @@ fun DrawTemperatureChart(temperatures: List<Float>, dates: List<String>, mycolor
                 .width(totalWidth)
                 .height(340.dp)
         ) {
-            val canvasHeight = size.height
+            val canvasHeight: Float = size.height
 
             for (i in temperatures.indices) {
                 val temperatureHeight =

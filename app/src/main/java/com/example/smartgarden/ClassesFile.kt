@@ -39,11 +39,6 @@ class UserManager(){
     var garden_clickable: Int? = null
     var arduino_to_change: Int? = null
     var gardenarduino: GardenArduino? = null
-    var password: String? = null
-    var wifiSSID: String? = null
-
-    var arduino_name: String? = null
-    var ardiono_description: String? = null
 
     fun addUser(id: Int) {usr = User(id)}
     

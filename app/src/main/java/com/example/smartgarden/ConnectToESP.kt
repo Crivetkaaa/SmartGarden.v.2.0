@@ -47,6 +47,7 @@ class ConnectToESP {
         CoroutineScope(Dispatchers.Main).launch {
             postToESP("newarduino/", params){ result->
                 try {
+                    Log.d("MyTag", result)
                     val resbody = JSONObject(result)
                     val status = resbody.getBoolean("status")
                     callback(status)

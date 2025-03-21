@@ -64,6 +64,8 @@ fun Greeting2(modifier: Modifier = Modifier) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    Log.d("MyTag", usrManager.usr!!.id.toString())
+
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
