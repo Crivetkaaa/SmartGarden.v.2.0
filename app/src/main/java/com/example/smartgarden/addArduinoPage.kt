@@ -54,8 +54,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import com.example.smartgarden.ui.theme.SmartGardenTheme
-import com.example.wifiscanner.Test
-import com.example.wifiscanner.WifiScannerScreen
+
 
 class addArduinoPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +75,7 @@ class addArduinoPage : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WifiScannerScreen(context: Context, modifier: Modifier) {
+fun WifiScannerScreen(context: Context, modifier: Modifier = Modifier) {
     var wifiNetworks by remember { mutableStateOf<List<ScanResult>>(emptyList()) }
     var permissionGranted by remember { mutableStateOf(false) }
     var permissionRequested by remember { mutableStateOf(false) }
@@ -194,7 +193,6 @@ fun getAvailableWifiNetworks(context: Context): List<ScanResult>? {
 @Composable
 fun GreetingPreview8() {
     SmartGardenTheme {
-        LocalContext.current
-        WifiScannerScreen(LocalContext.current)
+        WifiScannerScreen(context = LocalContext.current, )
     }
 }
