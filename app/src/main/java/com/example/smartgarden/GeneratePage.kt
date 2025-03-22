@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.focus.onFocusChanged
 
 
 @Composable
@@ -204,5 +204,60 @@ fun GardenMenuInfo(labelName: String, name: String, description: String, functio
         }
 
         HorizontalDivider(Modifier.padding(vertical = 6.dp), thickness = 2.dp)
+    }
+}
+
+
+@Composable
+fun DropVegetablesMenu(myonvalue: (String) -> Unit, label: String, placeholder: String, data: ArrayList<Vegetables>?) {
+    val expanded = remember { mutableStateOf(false) }
+    val selectedOption = remember { mutableStateOf("") }
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            value = selectedOption.value,
+            onValueChange = { newValue ->
+                selectedOption.value = newValue
+                myonvalue(newValue) // Обновляем значение при вводе
+                expanded.value = false // Открываем меню при вводе
+            },
+            label = { Text(label) },
+            placeholder = { Text(placeholder) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp)
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        expanded.value = true // Открываем меню, если поле в фокусе
+                    }
+                },
+            readOnly = false,
+            trailingIcon = {
+                Box {
+                    IconButton(onClick = { expanded.value = true }) {
+                        Icon(
+                            Icons.Default.ArrowDropDown,
+                            contentDescription = "Показать меню"
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }
+                    ) {
+                        // Фильтруем данные на основе введенного текста
+                        val filteredData = data?.filter { it.vegetabel.contains(selectedOption.value, ignoreCase = true) }
+                        filteredData?.forEach { vegetables ->
+                            DropdownMenuItem(onClick = {
+                                selectedOption.value = vegetables.vegetabel
+                                myonvalue(vegetables.vegetabel)
+                                expanded.value = false
+                            },
+                                text = { Text(vegetables.vegetabel) }
+                            )
+                        }
+                    }
+                }
+            }
+        )
     }
 }

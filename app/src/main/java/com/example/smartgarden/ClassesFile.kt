@@ -17,6 +17,10 @@ data class ArduinoData(
 
 )
 
+data class Vegetables(
+    val vegetabel: String
+)
+
 data class GardenArduino(
     val garden: Garden? = null,
     val arduino: Arduino? = null

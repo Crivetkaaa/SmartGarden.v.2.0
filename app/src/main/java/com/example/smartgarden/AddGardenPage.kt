@@ -66,12 +66,17 @@ fun Greeting3(modifier: Modifier = Modifier) {
     val garden_name = remember { mutableStateOf("") }
     val garden_discription = remember { mutableStateOf("") }
     val arduino_id = remember { mutableStateOf("") }
+    val vegetable = remember { mutableStateOf("") }
 
     val free_arduin =  remember { mutableStateOf<ArrayList<Arduino>?>(null) }
+    val vegetables = remember { mutableStateOf<ArrayList<Vegetables>?>(null) }
 
     LaunchedEffect(false) {
         usrManager.getArduino(true) { result ->
             free_arduin.value = result
+        }
+        ConnectToAPI().getVegetables { result->
+            vegetables.value = result
         }
     }
     Scaffold (modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -108,6 +113,10 @@ fun Greeting3(modifier: Modifier = Modifier) {
 
             DropMenu({arduino_id.value = it}, "Ардуино", "Ваша ардуино", free_arduin.value)
 
+            Spacer(Modifier.fillMaxWidth(0.06f).padding(6.dp))
+
+            DropVegetablesMenu({vegetable.value = it}, "Vegetabel", "Какой vegetabel", vegetables.value)
+
             Row(modifier = Modifier.fillMaxWidth().padding(24.dp),
                 horizontalArrangement = Arrangement.Center) {
                 Button(modifier = Modifier.padding(12.dp),
@@ -115,14 +124,15 @@ fun Greeting3(modifier: Modifier = Modifier) {
                     onClick = {
                         if (arduino_id.value.isEmpty()) {
                             addArduinoInGarden(content,
-                                garden_name=garden_name.value, garden_discription=garden_discription.value)
+                                garden_name=garden_name.value,
+                                garden_discription=garden_discription.value,
+                                vegetable = vegetable.value)
                         } else {
                             addArduinoInGarden(
                                 content, arduino_id.value.toInt(),
-                                garden_name.value, garden_discription.value
+                                garden_name.value, garden_discription.value, vegetable.value
                             )
                         }
-                        Log.d("MyTag", "${arduino_id.value}")
 
                     }) {
                     Text("Добавить", fontSize = 22.sp)

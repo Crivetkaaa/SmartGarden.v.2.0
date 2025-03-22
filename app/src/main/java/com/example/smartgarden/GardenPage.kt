@@ -72,6 +72,7 @@ class GardenPage : ComponentActivity() {
 
 @Composable
 fun GardenPagePainter(modifier: Modifier = Modifier) {
+    //TODO отобржать что тут овощь
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 

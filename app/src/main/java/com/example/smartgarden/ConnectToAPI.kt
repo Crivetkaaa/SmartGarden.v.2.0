@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 
 class ConnectToAPI {
-    val ip = "http://188.32.24.142:12000/"
+    val ip = "http://192.168.0.24:8000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -236,6 +236,24 @@ class ConnectToAPI {
                     callback(array)
                 } catch (e: Exception) {
                     Log.e("MyTag", "Ошибка при обработке данных: ${e.message}")
+                }
+
+            }
+        }
+    }
+    fun getVegetables(callback: (ArrayList<Vegetables>) -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            getFromAPI("api/vegetable/") { result ->
+                try {
+                    Log.d("MyTag", result)
+                    var array: ArrayList<Vegetables> = ArrayList()
+                    val resbody = JSONObject(result)
+                    for (key in resbody.keys()) {
+                        array.add(Vegetables(resbody.getString(key)))
+                    }
+                    callback(array)
+                } catch (e: Exception){
+
                 }
 
             }

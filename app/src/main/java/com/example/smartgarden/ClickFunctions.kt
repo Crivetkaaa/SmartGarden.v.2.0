@@ -65,17 +65,22 @@ fun addGardenButton(context: Context){
     context.startActivity(Intent(context, AddGardenPage::class.java))
 }
 
-fun addArduinoInGarden(context: Context, arduino_id: Int = 0, garden_name: String, garden_discription: String){
+fun addArduinoInGarden(context: Context, arduino_id: Int = 0, garden_name: String, garden_discription: String, vegetable: String = ""){
     if (garden_name.isEmpty() || garden_discription.isEmpty()){
         Toast.makeText(context, "Название и описание теплицы не могут быть пустыми", Toast.LENGTH_SHORT).show()
+    } else if (vegetable != "" && arduino_id == 0){
+        Toast.makeText(context, "Тип овощей не может быть указан с пустым полем ардуино", Toast.LENGTH_SHORT).show()
     } else {
         (context as Activity).finish()
         val params = mapOf(
             "arduino_id" to arduino_id,
             "garden_name" to garden_name,
             "garden_description" to garden_discription,
-            "user_id" to usrManager.usr!!.id
+            "user_id" to usrManager.usr!!.id,
+            "vegetable" to vegetable
         )
+
+        Log.d("MyTag", params.toString())
         ConnectToAPI().addArduinGardenAPI(params) { status, result ->
             Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
             if (status) {
