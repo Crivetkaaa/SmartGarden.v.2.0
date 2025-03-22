@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -122,6 +123,20 @@ fun Greeting2(modifier: Modifier = Modifier) {
                                     text = "${garden.garden_description}",
                                     fontSize = 22.sp
                                 )
+                                if (garden.vegetable != "null") {
+                                    HorizontalDivider(Modifier.padding(vertical = 1.dp)
+                                        .padding(horizontal = 6.dp), thickness = 2.dp, color =
+                                        colorResource(R.color.GardenCardDivider
+                                    )
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 6.dp, vertical = 8.dp),
+                                        text = "${garden.vegetable}",
+                                        fontSize = 22.sp
+                                    )
+                                }
                             }
                         }
                     }

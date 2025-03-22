@@ -29,7 +29,8 @@ data class GardenArduino(
 data class Garden(
     val garden_id: Int,
     var garden_name: String,
-    var garden_description: String
+    var garden_description: String,
+    val vegetable: String? = null
 )
 
 data class Arduino(

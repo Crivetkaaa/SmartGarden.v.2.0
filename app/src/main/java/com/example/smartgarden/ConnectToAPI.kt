@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 
 class ConnectToAPI {
-    val ip = "http://192.168.0.24:8000/"
+    val ip = "http://188.32.24.142:12000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {
@@ -92,15 +92,16 @@ class ConnectToAPI {
             val url = "api/garden/?user_id=${usrManager.usr!!.id}"
             getFromAPI(url){result ->
                 try {
-                    var usergardens: ArrayList<Garden> = ArrayList()
+                    val usergardens: ArrayList<Garden> = ArrayList()
                     val resbody = JSONObject(result)
                     for (key in resbody.keys()) {
                         val garden_name = resbody.getJSONObject(key).getString("garden_name")
                         val garden_description = resbody.getJSONObject(key).getString("garden_description")
+                        val garden_vegetable = resbody.getJSONObject(key).getString("vegetable")
 
 
                         usergardens.add(Garden(garden_id = key.toInt(), garden_name = garden_name,
-                            garden_description = garden_description))
+                            garden_description = garden_description, vegetable = garden_vegetable))
                     callback(usergardens)
                     }
                 } catch (e:Exception){
