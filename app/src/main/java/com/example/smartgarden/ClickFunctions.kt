@@ -237,3 +237,18 @@ fun addArduino(context: Context, wifiSSID: String, wifiPassword: String,
         Toast.makeText(context, "WiFi не может быть пустым",  Toast.LENGTH_SHORT).show()
     }
 }
+
+fun updateReleStatus(arduino_id: Int, rele_id: Int, rele_status: Boolean, callback: (ArrayList<Boolean>) -> Unit){
+    val params = mapOf(
+        "arduino_id" to arduino_id,
+        "rele_id" to rele_id,
+        "rele_status" to rele_status
+    )
+
+    ConnectToAPI().postReleStatus(params){ result->
+        callback(result)
+    }
+
+
+
+}

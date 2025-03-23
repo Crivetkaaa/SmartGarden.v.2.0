@@ -28,6 +28,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -72,7 +75,6 @@ class GardenPage : ComponentActivity() {
 
 @Composable
 fun GardenPagePainter(modifier: Modifier = Modifier) {
-    //TODO отобржать что тут овощь
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -81,12 +83,20 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
 
     var garden_infos by remember { mutableStateOf<GardenArduino?>(null) }
     var gardenData by remember { mutableStateOf<List<ArduinoData>?>(null) }
+    var releStatus by remember { mutableStateOf(mutableListOf(false, false, false)) }
+
+    var array: ArrayList<Boolean> = ArrayList()
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 getGardenInfo(context) { result ->
                     garden_infos = result
+                    if (garden_infos!!.arduino != null) {
+                        ConnectToAPI().getReleStatus(garden_infos!!.arduino!!.arduino_id) { result ->
+                            releStatus = result.toMutableList()
+                        }
+                    }
                 }
 
 
@@ -130,6 +140,30 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 arduinoInfo.arduino_name,
                 arduinoInfo.arduino_description,
                 { editButtonArduino(context) })
+
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 60.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (i in releStatus.indices) {
+                    array.add(releStatus[i])
+                    Button(
+                        onClick = {
+                            Log.d("MyTag", "Was click ${i+1}")
+                            array[i] = !releStatus[i]
+                            updateReleStatus(arduinoInfo.arduino_id,  i+1, !releStatus[i]){ result->
+                                array = result
+                            }
+                            releStatus = array.toMutableList()
+
+                        },
+                        colors = ButtonDefaults.buttonColors(if (releStatus[i]) Color.Green else Color.Red)
+                    ) {
+                        Text("Реле ${i + 1}")
+                    }
+                }
+            }
+
             Row(
                 Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
             ) {

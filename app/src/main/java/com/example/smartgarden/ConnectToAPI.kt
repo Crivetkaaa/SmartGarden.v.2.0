@@ -245,18 +245,51 @@ class ConnectToAPI {
     fun getVegetables(callback: (ArrayList<Vegetables>) -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
             getFromAPI("api/vegetable/") { result ->
+                var array: ArrayList<Vegetables> = ArrayList()
                 try {
                     Log.d("MyTag", result)
-                    var array: ArrayList<Vegetables> = ArrayList()
                     val resbody = JSONObject(result)
                     for (key in resbody.keys()) {
                         array.add(Vegetables(resbody.getString(key)))
                     }
                     callback(array)
                 } catch (e: Exception){
-
+                    callback(array)
                 }
 
+            }
+        }
+    }
+
+    fun getReleStatus(arduino_id: Int, callback: (MutableList<Boolean>) -> Unit){
+        CoroutineScope(Dispatchers.Main).launch {
+            getFromAPI("api/relestatus/?arduino_id=$arduino_id"){ result->
+                try {
+                    val array: ArrayList<Boolean> = ArrayList()
+                    val resbody = JSONObject(result)
+                    for (key in resbody.keys()){
+                        array.add(resbody.getBoolean(key))
+                    }
+                    callback(array.toMutableList())
+                } catch (e: Exception) {
+                    callback(arrayListOf(false, false, false))
+                }
+            }
+        }
+    }
+    fun postReleStatus(params: Map<String, Any>, callback: (ArrayList<Boolean>) -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            postToAPI("api/relestatus/", params) { result->
+                try {
+                    val array: ArrayList<Boolean> = ArrayList()
+                    val resbody = JSONObject(result)
+                    for (key in resbody.keys()){
+                        array.add(resbody.getBoolean(key))
+                    }
+                    callback(array)
+                } catch (e: Exception) {
+                    callback(arrayListOf(false, false, false))
+                }
             }
         }
     }
