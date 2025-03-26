@@ -164,6 +164,8 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
                 }
             }
 
+            HorizontalDivider(Modifier.padding(vertical = 6.dp), thickness = 2.dp)
+
             Row(
                 Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
             ) {
@@ -186,12 +188,14 @@ fun GardenPagePainter(modifier: Modifier = Modifier) {
 
 
                 Spacer(Modifier.height(45.dp))
+                HorizontalDivider(Modifier.padding(vertical = 6.dp), thickness = 2.dp)
                 DrawTemperatureChart(
                     air_h, dates,
                     colorResource(R.color.AirHumidityGraphic), "Влажность воздуха"
                 )
 
                 Spacer(Modifier.height(45.dp))
+                HorizontalDivider(Modifier.padding(vertical = 6.dp), thickness = 2.dp)
                 DrawTemperatureChart(
                     earth_h, dates,
                     colorResource(R.color.EarthHumidityGraphic), "Влажность земли"
