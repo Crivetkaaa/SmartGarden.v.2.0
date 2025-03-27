@@ -217,7 +217,7 @@ fun addArduino(context: Context, wifiSSID: String, wifiPassword: String,
         val params = mapOf(
             "wifiSSID" to wifiSSID,
             "wifiPassword" to wifiPassword,
-            "ardiono_name" to arduino_name,
+            "arduino_name" to arduino_name,
             "arduino_description" to arduino_description,
             "user_id" to usrManager.usr!!.id
         )

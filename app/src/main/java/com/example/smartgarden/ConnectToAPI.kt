@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 
 class ConnectToAPI {
-    val ip = "http://188.32.24.142:12000/"
+    val ip = "http://192.168.0.24:8000/"
 
     suspend fun getFromAPI(url: String, callback: (String) ->Unit){
         try {

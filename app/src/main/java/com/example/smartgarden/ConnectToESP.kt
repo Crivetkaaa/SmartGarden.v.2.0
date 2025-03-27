@@ -39,7 +39,7 @@ class ConnectToESP {
                 callback("Error code - ${response.statusCode}")
             }
         } catch (e: Exception){
-            callback("No internet connection")
+            callback(e.toString())
         }
     }
 
@@ -47,7 +47,7 @@ class ConnectToESP {
         CoroutineScope(Dispatchers.Main).launch {
             postToESP("newarduino/", params){ result->
                 try {
-                    Log.d("MyTag", result)
+                    Log.d("MyTag", "ESP result: $result")
                     val resbody = JSONObject(result)
                     val status = resbody.getBoolean("status")
                     callback(status)
