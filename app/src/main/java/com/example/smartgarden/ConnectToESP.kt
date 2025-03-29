@@ -57,5 +57,18 @@ class ConnectToESP {
             }
         }
     }
+    fun updateWiFi(params: Map<String, Any>, callback: (Boolean) -> Unit){
+        CoroutineScope(Dispatchers.Main).launch {
+            postToESP("updateWiFi/", params) { result ->
+                try{
+                    val status = JSONObject(result).getBoolean("status")
+                    callback(status)
+                } catch (e: Exception) {
+                    callback(false)
+                }
+
+            }
+        }
+    }
 
 }

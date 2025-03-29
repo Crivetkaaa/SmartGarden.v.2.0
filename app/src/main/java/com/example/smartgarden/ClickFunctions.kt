@@ -248,7 +248,26 @@ fun updateReleStatus(arduino_id: Int, rele_id: Int, rele_status: Boolean, callba
     ConnectToAPI().postReleStatus(params){ result->
         callback(result)
     }
+}
 
+fun goToUpdateWiFi(context: Context){
+    context.startActivity(Intent(context, editWiFiArduino::class.java))
+}
 
+fun updateWiFi(context: Context, WiFiSSID: String, WiFiPassword: String){
+    val params = mapOf(
+        "wifiSSID" to WiFiSSID,
+        "wifiPassword" to WiFiPassword,
+    )
+
+    ConnectToESP().updateWiFi(params) {result ->
+        val status = result
+        if (status){
+            Toast.makeText(context, "Данные WiFi были обновленны", Toast.LENGTH_SHORT).show()
+            (context as Activity).finish()
+        } else {
+            Toast.makeText(context, "Проверте подключение", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }

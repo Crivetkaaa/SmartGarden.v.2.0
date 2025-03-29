@@ -20,6 +20,11 @@
         android:theme="@style/Theme.SmartGarden"
         tools:targetApi="31">
         <activity
+            android:name=".editWiFiArduino"
+            android:exported="false"
+            android:label="@string/title_activity_edit_wi_fi_arduino"
+            android:theme="@style/Theme.SmartGarden" />
+        <activity
             android:name=".test"
             android:exported="false"
             android:label="@string/title_activity_test"

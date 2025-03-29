@@ -109,7 +109,9 @@ fun ArduinoPageGenerate(modifier: Modifier = Modifier) {
                 Log.d("MyTag", "$arduino")
                 Card(
                     modifier = Modifier.padding(3.dp),
-                    onClick = {}
+                    onClick = {
+                        goToUpdateWiFi(context)
+                    }
                 ) {
                     Box(
                         modifier = Modifier
